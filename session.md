@@ -1,18 +1,24 @@
 # Session
 
-# 1、简介
+## 1、简介
 由于 HTTP 驱动的应用是无状态的，所以我们使用 session 来存储用户请求信息。Laravel 通过干净、统一的 API 处理后端各种有效 session 驱动，目前支持的流行后端驱动包括 Memcached、Redis 和数据库。
-## 1.1 配置
+
+### 1.1 配置
 Session 配置文件位于 config/session.php。默认情况下，Laravel 使用的 session 驱动为文件驱动，这对许多应用而言是没有什么问题的。在生产环境中，你可能考虑使用 memcached 或者 redis 驱动以便获取更快的 session 性能。
+
 session 驱动定义请求的 session 数据存放在哪里，Laravel 可以处理多种类型的驱动：
+
 - 	file – session 数据存储在 storage/framework/sessions 目录下； 
 - 	cookie – session 数据存储在经过加密的安全的 cookie 中； 
 - 	database – session 数据存储在数据库中 
 - 	memcached / redis – session 数据存储在 memcached/redis 中； 
 - 	array – session 数据存储在简单 PHP 数组中，在多个请求之间是非持久化的。
+
 注意：数组驱动通常用于运行测试以避免 session 数据持久化。
-## 1.2 Session 驱动预备知识
-### 1.2.1 数据库
+
+### 1.2 Session 驱动预备知识
+
+#### 1.2.1 数据库
 当使用 databasesession 驱动时，需要设置表包含 session 项，下面是该数据表的表结构声明：
 
 ```
@@ -31,12 +37,14 @@ composer dump-autoload
 php artisan migrate
 ```
 
-### 1.2.2 Redis
+#### 1.2.2 Redis
 在 Laravel 中使用 Redis session 驱动前，需要通过 Composer 安装 predis/predis 包。
-## 1.3 其它 Session 相关问题
+
+### 1.3 其它 Session 相关问题
 Laravel 框架内部使用 flash session 键，所以你不应该通过该名称添加数据项到 session。
 如果你需要所有存储的 session 数据经过加密，在配置文件中设置 encrypt 配置为 true。
-# 2、基本使用
+
+## 2、基本使用
 **访问 session**
 首先，我们来访问 session，我们可以通过 HTTP 请求访问 session 实例，可以在控制器方法中通过类型提示引入请求实例，记住，控制器方法依赖通过 Laravel服务容器注入：
 
@@ -138,7 +146,7 @@ $request->session()->flush();
 $request->session()->regenerate();
 ```
 
-## 2.1 一次性数据
+### 2.1 一次性数据
 有时候你可能想要在 session 中存储只在下个请求中有效的数据，可以通过 flash 方法来实现。使用该方法存储的 session 数据只在随后的 HTTP 请求中有效，然后将会被删除：
 
 ```
@@ -152,7 +160,7 @@ $request->session()->reflash();
 $request->session()->keep(['username', 'email']);
 ```
 
-# 3、添加自定义Session 驱动
+## 3、添加自定义Session 驱动
 要为 Laravel 后端 session 添加更多驱动，可以使用 Session 门面上的 extend 方法。可以在服务提供者的 boot 方法中调用该方法：
 
 ```
@@ -208,6 +216,7 @@ class MongoHandler implements SessionHandlerInterface{
 ```
 
 由于这些方法并不像缓存的 StoreInterface 接口方法那样容易理解，我们接下来快速过一遍每一个方法：
+
 - 	 open 方法用于基于文件的 session 存储系统，由于 Laravel 已经有了一个 file session 驱动，所以在该方法中不需要放置任何代码，可以将其置为空方法。 
 - 	close 方法和 open 方法一样，也可以被忽略，对大多数驱动而言都用不到该方法。 
 - 	read 方法应该返回与给定$sessionId 相匹配的 session 数据的字符串版本，从驱动中获取或存储 session 数据不需要做任何序列化或其它编码，因为 Laravel 已经为我们做了序列化。 

@@ -1,6 +1,6 @@
 # 视图
 
-# 1、基本使用
+## 1、基本使用
 视图包含服务于应用的 HTML 并将应用的控制器逻辑和表现逻辑进行分离。视图文件存放在 resources/views 目录。
 下面是一个简单视图：
 
@@ -39,21 +39,23 @@ if (view()->exists('emails.customer')) {
 ```
 
 调用不带参数的 view 时，将会返回一个 Illuminate\Contracts\View\Factory 实例，从而可以调用该工厂的所有方法。
-## 1.1 视图数据
-### 1.1.1 传递数据到视图
+
+### 1.1 视图数据
+
+#### 1.1.1 传递数据到视图
 在上述例子中可以看到，我们可以简单通过数组方式将数据传递到视图：
 
 ```
 return view('greetings', ['name' => 'Victoria']);
 ```
 
-以这种方式传递数据的话，$data 应该是一个键值对数组，在视图中，就可以使用相应的键来访问数据值，比如<?php echo $key; ?>。除此之外，还可以通过 with 方法添加独立的数据片段到视图：
+以这种方式传递数据的话，`$data` 应该是一个键值对数组，在视图中，就可以使用相应的键来访问数据值，比如<?php echo `$key; ?>`。除此之外，还可以通过 with 方法添加独立的数据片段到视图：
 
 ```
 $view = view('greeting')->with('name', 'Victoria');
 ```
 
-### 1.1.2 在视图间共享数据
+#### 1.1.2 在视图间共享数据
 有时候我们需要在所有视图之间共享数据片段，这时候可以使用视图工厂的 share 方法，通常，需要在服务提供者的 boot 方法中调用 share 方法，你可以将其添加到 AppServiceProvider 或生成独立的服务提供者来存放它们：
 
 ```
@@ -85,8 +87,9 @@ class AppServiceProvider extends ServiceProvider
 }
 ```
 
-# 2、视图 Composer
+## 2、视图 Composer
 视图 Composers 是当视图被渲染时的回调或类方法。如果你有一些数据要在视图每次渲染时都做绑定，可以使用视图 composer 将逻辑组织到一个单独的地方。
+
 首先要在服务提供者中注册视图 Composer，我们将会使用帮助函数 view 来访问 Illuminate\Contracts\View\Factory 的底层实现，记住，Laravel 不会包含默认的视图 Composers 目录，我们可以按照自己的喜好组织其位置，例如可以创建一个 App\Http\ViewComposers 目录：
 
 ```
@@ -194,7 +197,7 @@ view()->composer('*', function ($view) {
 });
 ```
 
-## 2.1 视图创建器
+### 2.1 视图创建器
 视图创建器和视图 composer 非常类似，不同之处在于前者在视图实例化之后立即失效而不是等到视图即将渲染。使用 create 方法注册一个视图创建器：
 
 ```

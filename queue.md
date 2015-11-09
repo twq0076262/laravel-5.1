@@ -1,11 +1,14 @@
 # 队列
 
-# 1、简介
+## 1、简介
 Laravel 队列服务为各种不同的后台队列提供了统一的 API。队列允许你推迟耗时任务（例如发送邮件）的执行，从而大幅提高 web 请求速度。
-## 1.1 配置
+
+### 1.1 配置
 队列配置文件存放在 config/queue.php。在该文件中你将会找到框架自带的每一个队列驱动的连接配置，包括数据库、Beanstalkd、 IronMQ、 Amazon SQS、 Redis 以及同步（本地使用）驱动。其中还包含了一个 null 队列驱动以拒绝队列任务。
-## 1.2 队列驱动预备知识
-### 1.2.1 数据库
+
+### 1.2 队列驱动预备知识
+
+#### 1.2.1 数据库
 为了使用 database 队列驱动，需要一张数据库表来存放任务，要生成创建该表的迁移，运行 Artisan 命令 queue:table，迁移被创建好了之后，使用 migrate 命令运行迁移：
 
 ```
@@ -13,14 +16,17 @@ php artisan queue:table
 php artisan migrate
 ```
 
-### 1.2.2 其它队列依赖
+#### 1.2.2 其它队列依赖
 下面是以上列出队列驱动需要安装的依赖：
+
 - 	Amazon SQS: aws/aws-sdk-php ~3.0 
 - 	Beanstalkd: pda/pheanstalk ~3.0 
 - 	IronMQ: iron-io/iron_mq ~2.0 
 - 	Redis: predis/predis ~1.0
-# 2、编写任务类
-## 2.1 生成任务类
+
+## 2、编写任务类
+
+### 2.1 生成任务类
 默认情况下，应用的所有队列任务都存放在 app/Jobs 目录。你可以使用 Artisan CLI 生成新的队列任务：
 
 ```
@@ -28,7 +34,8 @@ php artisan make:job SendReminderEmail --queued
 ```
 
 该命令将会在 app/Jobs 目录下生成一个新的类，并且该类实现了 Illuminate\Contracts\Queue\ShouldQueue 接口，告诉 Laravel 该任务应该被推送到队列而不是同步运行。
-## 2.2 任务类结构
+
+### 2.2 任务类结构
 任务类非常简单，正常情况下只包含一个当队列处理该任务时被执行的 handle 方法，让我们看一个任务类的例子：
 
 ```
@@ -80,9 +87,11 @@ class SendReminderEmail extends Job implements SelfHandling, ShouldQueue
 
 在本例中，注意我们能够直接将Eloquent 模型传递到对列任务的构造函数中。由于该任务使用了 SerializesModels trait，Eloquent 模型将会在任务被执行是优雅地序列化和反序列化。如果你的队列任务在构造函数中接收 Eloquent 模型，只有模型的主键会被序列化到队列，当任务真正被执行的时候，队列系统会自动从数据库中获取整个模型实例。这对应用而言是完全透明的，从而避免序列化整个 Eloquent 模型实例引起的问题。
 handle 方法在任务被队列处理的时候被调用，注意我们可以在任务的 handle 方法中对依赖进行类型提示。Laravel服务容器会自动注入这些依赖。
-### 2.2.1 出错
+
+#### 2.2.1 出错
 如果任务被处理的时候抛出异常，则该任务将会被自动释放回队列以便再次尝试执行。任务会持续被释放知道尝试次数达到应用允许的最大次数。最大尝试次数通过 Artisan 任务 queue:listen 或 queue:work 上的--tries 开关来定义。关于运行队列监听器的更多信息可以在下面看到。
-### 2.2.2 手动释放任务
+
+#### 2.2.2 手动释放任务
 如果你想要手动释放任务，生成的任务类中自带的 InteractsWithQueue trait 提供了释放队列任务的 release 方法，该方法接收一个参数——同一个任务两次运行之间的等待时间：
 
 ```
@@ -93,7 +102,7 @@ public function handle(Mailer $mailer){
 }
 ```
 
-### 2.2.3 检查尝试运行次数
+#### 2.2.3 检查尝试运行次数
 正如上面提到的，如果在任务处理期间发生异常，任务会自动释放回队列中，你可以通过 attempts 方法来检查该任务已经尝试运行次数：
 
 ```
@@ -104,7 +113,7 @@ public function handle(Mailer $mailer){
 }
 ```
 
-# 3、推送任务到队列
+## 3、推送任务到队列
 默认的 Laravel 控制器位于 app/Http/Controllers/Controller.php 并使用了 DispatchesJobs trait。该 trait 提供了一些允许你方便推送任务到队列的方法，例如 dispatch 方法：
 
 ```
@@ -179,7 +188,7 @@ class UserController extends Controller{
 }
 ```
 
-## 3.1 延迟任务
+### 3.1 延迟任务
 有时候你可能想要延迟队列任务的执行。例如，你可能想要将一个注册 15 分钟后给消费者发送提醒邮件的任务放到队列中，可以通过使用任务类上的 delay 方法来实现，该方法由 Illuminate\Bus\Queueable trait 提供：
 
 ```
@@ -211,7 +220,8 @@ class UserController extends Controller{
 
 在本例中，我们指定任务在队列中开始执行前延迟 60 秒。
 注意：Amazon SQS 服务最大延迟时间是 15 分钟。
-## 3.2 从请求中分发任务
+
+### 3.2 从请求中分发任务
 映射HTTP请求变量到任务中很常见，Laravel 提供了一些帮助函数让这种实现变得简单，而不用每次请求时手动执行映射。让我么看一下 DispatchesJobs trait 上的 dispatchFrom 方法。默认情况下，该 trait 包含在 Laravel 控制器基类中：
 
 ```
@@ -239,6 +249,7 @@ class CommerceController extends Controller{
 ```
 
 该方法检查给定任务类的构造函数并从 HTTP 请求（或者其它 ArrayAccess 对象）中解析变量来填充任务需要的构造函数参数。所以，如果我们的任务类在构造函数中接收一个 productId 变量，该任务将会尝试从 HTTP 请求中获取 productId 参数。
+
 你还可以传递一个数组作为 dispatchFrom 方法的第三个参数。该数组用于填充所有请求中不存在的构造函数参数：
 
 ```
@@ -247,7 +258,7 @@ $this->dispatchFrom('App\Jobs\ProcessOrder', $request, [
 ]);
 ```
 
-# 4、运行队列监听器
+## 4、运行队列监听器
 **开启任务监听器**
 Laravel 包含了一个 Artisan 命令用来运行推送到队列的新任务。你可以使用 queue:listen 命令运行监听器：
 
@@ -285,7 +296,8 @@ php artisan queue:listen --sleep=5
 ```
 
 需要注意的是队列只会在队列上没有任务时“睡眠”，如果存在多个有效任务，该队列会持续运行，从不睡眠。
-## 4.1 Supervisor配置
+
+### 4.1 Supervisor配置
 Supervisor 为 Linux 操作系统提供的进程监视器，将会在失败时自动重启 queue:listen 或 queue:work 命令，要在 Ubuntu 上安装 Supervisor，使用如下命令：
 
 ```
@@ -315,7 +327,8 @@ sudo supervisorctl start laravel-worker:*
 ```
 
 要了解更多关于 Supervisor 的使用和配置，查看Supervisor 文档。此外，还可以使用 Laravel Forge 从 web 接口方便地自动配置和管理 Supervisor 配置。
-## 4.2 后台队列监听器
+
+### 4.2 后台队列监听器
 Artisan 命令 queue:work 包含一个--daemon 选项来强制队列 worker 持续处理任务而不必重新启动框架。相较于 queue:listen 命令该命令对 CPU 的使用有明显降低：
 
 ```
@@ -325,10 +338,13 @@ php artisan queue:work connection --daemon --sleep=3 --tries=3
 ```
 
 正如你所看到的，queue:work 任务支持大多数 queue:listen 中有效的选项。你可以使用 php artisan help queue:work 任务来查看所有有效选项。
-### 4.2.1 后台队列监听器编码考虑
+
+#### 4.2.1 后台队列监听器编码考虑
 后台队列 worker 在处理每个任务时不重启框架，因此，你要在任务完成之前释放资源，举个例子，如果你在使用 GD 库操作图片，那么就在完成时使用 imagedestroy 释放内存。
+
 类似的，数据库连接应该在后台长时间运行完成后断开，你可以使用 DB::reconnect 方法确保获取了一个新的连接。
-## 4.3 部署后台队列监听器
+
+### 4.3 部署后台队列监听器
 由于后台队列 worker 是常驻进程，不重启的话不会应用代码中的更改，所以，最简单的部署后台队列 worker 的方式是使用部署脚本重启所有 worker，你可以通过在部署脚本中包含如下命令重启所有 worker：
 
 ```
@@ -336,9 +352,12 @@ php artisan queue:restart
 ```
 
 该命令会告诉所有队列 worker 在完成当前任务处理后重启以便没有任务被遗漏。
+
 注意：这个命令依赖于缓存系统重启进度表，默认情况下，APC 在 CLI 任务中无法正常工作，如果你在使用 APC，需要在 APC 配置中添加 apc.enable_cli=1。
-# 5、处理失败任务
+
+## 5、处理失败任务
 由于事情并不总是按照计划发展，有时候你的队列任务会失败。别担心，它发生在我们大多数人身上！Laravel 包含了一个方便的方式来指定任务最大尝试执行次数，任务执行次数达到最大限制后，会被插入到 failed_jobs 表，失败任务的名字可以通过配置文件 config/queue.php 来配置。
+
 要创建一个 failed_jobs 表的迁移，可以使用 queue:failed-table 命令：
 
 ```
@@ -351,7 +370,7 @@ php artisan queue:failed-table
 php artisan queue:listen connection-name --tries=3
 ```
 
-## 5.1 失败任务事件
+### 5.1 失败任务事件
 如果你想要注册一个队列任务失败时被调用的事件，可以使用 Queue::failing 方法，该事件通过邮件或HipChat通知团队。举个例子，我么可以在 Laravel 自带的 AppServiceProvider 中附件一个回调到该事件：
 
 ```
@@ -387,7 +406,7 @@ class AppServiceProvider extends ServiceProvider{
 }
 ```
 
-### 5.1.1 任务类的失败方法
+#### 5.1.1 任务类的失败方法
 想要更加细粒度的控制，可以在队列任务类上直接定义 failed 方法，从而允许你在失败发生时执行指定动作：
 
 ```
@@ -429,7 +448,7 @@ class SendReminderEmail extends Job implements SelfHandling, ShouldQueue
 }
 ```
 
-## 5.2 重试失败任务
+### 5.2 重试失败任务
 要查看已插入到 failed_jobs 数据表中的所有失败任务，可以使用 Artisan 命令 queue:failed：
 
 ```

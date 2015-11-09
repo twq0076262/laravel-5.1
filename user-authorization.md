@@ -1,9 +1,10 @@
 # 用户授权
 
-# 1、简介
+## 1、简介
 除了提供“开箱即用”的认证服务之外，Laravel 还提供了一个简单的方式来管理授权逻辑以便控制对资源的访问权限。在 Laravel 中，有很多种方法和帮助函数来协助你管理授权逻辑，本文档将会一一覆盖这些方法。
 注意：授权在 Laravel 5.1.11 版本中引入，在将该特性集成到应用之前请参考升级指南。
-# 2、定义权限（Abilities）
+
+## 2、定义权限（Abilities）
 判断用户是否有权限执行给定动作的最简单方式就是使用 Illuminate\Auth\Access\Gate类来定义一个“权限”。我们在 AuthServiceProvider 中定义所有权限，例如，我们来定义一个接收当前 User 和 Post模型的 update-post 权限，在该权限中，我们判断用户 id 是否和文章的 user_id 匹配：
 
 ```
@@ -32,7 +33,8 @@ class AuthServiceProvider extends ServiceProvider{
 }
 ```
 
-注意我们并没有检查给定$user 是否为 NULL，当用户未经过登录认证或者用户没有通过 forUser 方法指定，Gate 会自动为所有权限返回 false。
+注意我们并没有检查给定`$user` 是否为 NULL，当用户未经过登录认证或者用户没有通过 forUser 方法指定，Gate 会自动为所有权限返回 false。
+
 **基于类的权限**
 除了注册授权回调闭包之外，还可以通过传递包含权限类名和类方法的方式来注册权限方法，当需要的时候，该类会通过服务容器进行解析：
 
@@ -40,8 +42,9 @@ class AuthServiceProvider extends ServiceProvider{
 $gate->define('update-post', 'PostPolicy@update');
 ```
 
-# 3、检查权限（Abilities）
-## 3.1 通过 Gate 门面
+## 3、检查权限（Abilities）
+
+### 3.1 通过 Gate 门面
 权限定义好之后，可以使用多种方式来“检查”。首先，可以使用 Gate 门面的 check, allows, 或者 denies 方法。所有这些方法都接收权限名和传递给该权限回调的参数作为参数。你不需要传递当前用户到这些方法，因为 Gate 会自动附加当前用户到传递给回调的参数，因此，当检查我们之前定义的 update-post 权限时，我们只需要传递一个 Post 实例到 denies 方法：
 
 ```
@@ -75,6 +78,7 @@ class PostController extends Controller{
 ```
 
 当然，allows 方法和 denies 方法是相对的，如果动作被授权会返回 true ，check 方法是 allows 方法的别名。
+
 **为指定用户检查权限**
 如果你想要使用 Gate 门面判断非当前用户是否有权限，可以使用 forUser 方法：
 
@@ -101,7 +105,7 @@ if (Gate::allows('delete-comment', [$post, $comment])) {
 }
 ```
 
-## 3.2 通过 User 模型
+### 3.2 通过 User 模型
 还可以通过 User 模型实例来检查权限。默认情况下，Laravel 的 App\User 模型使用一个 Authorizabletrait 来提供两种方法：can 和 cannot。这两个方法的功能和 Gate 门面上的 allows 和 denies 方法类似。因此，使用我们前面的例子，可以修改代码如下：
 
 ```
@@ -142,7 +146,7 @@ if ($request->user()->can('update-post', $post)) {
 }
 ```
 
-## 3.3 在Blade模板引擎中检查
+### 3.3 在Blade模板引擎中检查
 为了方便，Laravel 提供了 Blade 指令@can 来快速检查当前用户是否有指定权限。例如：
 
 ```
@@ -163,7 +167,7 @@ if ($request->user()->can('update-post', $post)) {
 @endcan
 ```
 
-## 3.4 在表单请求中检查
+### 3.4 在表单请求中检查
 你还可以选择在表单请求的 authorize 方法中使用 Gate 定义的权限。例如：
 
 ```
@@ -178,9 +182,11 @@ public function authorize(){
 }
 ```
 
-# 4、策略类（Policies）
+## 4、策略类（Policies）
+
 ## 4.1 创建策略类
 由于在 AuthServiceProvider 中定义所有的授权逻辑将会变得越来越臃肿笨重，尤其是在大型应用中，所以 Laravel 允许你将授权逻辑分割到多个“策略”类中，策略类是原生的 PHP 类，基于授权资源对授权逻辑进行分组。
+
 首先，让我们生成一个策略类来管理对 Post 模型的授权，你可以使用 Artisan 命令 make:policy 来生成该策略类。生成的策略类位于 app/Policies 目录：
 
 ```
@@ -212,7 +218,7 @@ class AuthServiceProvider extends ServiceProvider{
 }
 ```
 
-## 4.2 编写策略
+### 4.2 编写策略
 策略类生成和注册后，我们可以为授权的每个权限添加方法。例如，我们在 PostPolicy 中定义一个 update 方法，该方法判断给定 User 是否可以更新某个 Post：
 
 ```
@@ -240,8 +246,10 @@ class PostPolicy{
 
 你可以继续在策略类中为授权的权限定义更多需要的方法，例如，你可以定义 show, destroy, 或者 addComment 方法来认证多个 Post 动作。
 注意：所有策略类都通过服务容器进行解析，这意味着你可以在策略类的构造函数中类型提示任何依赖，它们将会自动被注入。
-## 4.3 检查策略
+
+### 4.3 检查策略
 策略类方法的调用方式和基于授权回调的闭包一样，你可以使用 Gate 门面，User 模型，@can 指令或者帮助函数 policy。
+
 **通过 Gate 门面**
 Gate 将会自动通过检测传递过来的类参数来判断使用哪一个策略类，因此，如果传递一个 Post 实例给 denies 方法，相应的，Gate 会使用 PostPolicy 来进行动作授权：
 
@@ -306,9 +314,10 @@ if (policy($post)->update($user, $post)) {
 }
 ```
 
-# 5、控制器授权
+## 5、控制器授权
 默认情况下，Laravel 自带的控制器基类 App\Http\Controllers\Controller 使用了 AuthorizesRequeststrait，该 trait 提供了可用于快速授权给定动作的 authorize 方法，如果授权不通过，则抛出 HttpException 异常。
-该 authorize 方法和其他多种授权方法使用方法一致，例如 Gate::allows 和$user->can()。因此，我们可以这样使用 authorize 方法快速授权更新 Post 的请求：
+
+该 authorize 方法和其他多种授权方法使用方法一致，例如 Gate::allows 和`$user->can()`。因此，我们可以这样使用 authorize 方法快速授权更新 Post 的请求：
 
 ```
 <?php

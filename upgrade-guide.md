@@ -1,9 +1,10 @@
 # 升级指南
+
 ## 更新到5.1.0
 **预计更新时间：小于1小时**
 
 ### 更新 bootstrap/autoload.php
-更新 bootstrap/autoload.php 中的变量 $compilePath：
+更新 bootstrap/autoload.php 中的变量 `$compilePath：`
 
 ```
 $compiledPath = __DIR__.'/cache/compiled.php';
@@ -36,7 +37,7 @@ PasswordController 不再需要在构造函数中声明任何依赖，可以移�
 ### Eloquent
 **create 方法**
 
-Eloquent 的 create 方法现在可以不传入任何参数进行调用，如果你在模型中要重写 create 方法，将 $attributes 参数的默认值改为数组：
+Eloquent 的 create 方法现在可以不传入任何参数进行调用，如果你在模型中要重写 create 方法，将 `$attributes` 参数的默认值改为数组：
 
 ```
 public static function create(array $attributes = []){
@@ -70,9 +71,9 @@ User::lists('id')->all();
 
 **日期格式化**
 
-以前，模型中的 Eloquent 日期字段存储格式可以通过重写 getDateFormat 方法来修改，现在依然可以这么做；但是为了更加方便可以在模型中简单通过指定 $dateFormat 属性来替代重写方法。
+以前，模型中的 Eloquent 日期字段存储格式可以通过重写 getDateFormat 方法来修改，现在依然可以这么做；但是为了更加方便可以在模型中简单通过指定 `$dateFormat` 属性来替代重写方法。
 
-在序列化模型到数组或 JSON 时日期格式也被应用到，当从 Laravel 5.0 迁移到5.1时，这将会改变 JSON 序列化的日期字段的格式。想要在序列化模型中设置指定的日期格式，你可以在模型中重写 serializeDate(DateTime $date)方法，这样就可以在不改变字段存储格式的情况下对格式化序列化的 Eloquent 日期字段有着更加细粒度的控制。
+在序列化模型到数组或 JSON 时日期格式也被应用到，当从 Laravel 5.0 迁移到5.1时，这将会改变 JSON 序列化的日期字段的格式。想要在序列化模型中设置指定的日期格式，你可以在模型中重写 serializeDate(DateTime `$date)`方法，这样就可以在不改变字段存储格式的情况下对格式化序列化的 Eloquent 日期字段有着更加细粒度的控制。
 
 ## Collection 类
 ### sortBy 方法
@@ -112,7 +113,7 @@ app/Commands 目录现在被重命名为 app/Jobs，但是并不需要将你的�
 createMatcher，createOpenMatcher 和 createPlainMatcher 方法已经从 Blade 编译器中移除，可以使用新的 directive 方法来为5.1版的 Blade 创建自定义的指令。查阅扩展 Blade 文档了解详情。
 
 ## 测试
-在 tests/TestCase.php 文件中新增 protected 属性 $baseUrl：
+在 tests/TestCase.php 文件中新增 protected 属性 `$baseUrl：`
 
 ```
 protected $baseUrl = 'http://localhost';
@@ -127,6 +128,7 @@ protected $baseUrl = 'http://localhost';
 如果你正在使用 Amazon S3 文件系统驱动，需要通过 Composer 升级相应的文件系统包：
 
 - Amazon S3: league/flysystem-aws-s3-v3 ~1.0
+
 ## 废弃
 以下 Laravel 特性已经被废弃并且会在2015年12月份的 Laravel 5.2 中被完全移除：
 
