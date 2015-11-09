@@ -45,9 +45,9 @@
   - [加密](encryption.md)
   - [错误&日志](error-and-log.md)
   - [事件](event.md)
-  - [文件系统/云存储](file-system-cloud-storage.md)finished
+  - [文件系统/云存储](file-system-cloud-storage.md)
   - [哈希](hash.md)
-  - [帮助函数](help-function.md)1
+  - [帮助函数](help-function.md)
   - [本地化](localization.md)
   - [邮件](email.md)
   - [包开发](package-development.md)

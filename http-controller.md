@@ -1,8 +1,11 @@
 # HTTP 控制器
 
-# 1、简介
+## 1、简介
+
 将所有的请求处理逻辑都放在单个 routes.php 中肯定是不合理的，你也许还希望使用控制器类组织管理这些行为。控制器可以将相关的HTTP请求封装到一个类中进行处理。通常控制器存放在 app/Http/Controllers 目录中。
-# 2、基本控制器
+
+## 2、基本控制器
+
 下面是一个基本控制器类的例子。所有的 Laravel 控制器应该继承自 Laravel 自带的控制器基类 Controller：
 
 ```
@@ -35,15 +38,19 @@ Route::get('user/{id}', 'UserController@showProfile');
 ```
 
 现在，如果一个请求匹配上面的路由 URI，UserController 的 showProfile 方法就会被执行。当然，路由参数也会被传递给这个方法。
-## 2.1 控制器&命名空间
+
+### 2.1 控制器&命名空间
+
 你应该注意到我们在定义控制器路由的时候没有指定完整的控制器命名空间，而只是定义了 App\Http\Controllers 之后的部分。默认情况下，RouteServiceProvider 将会在一个路由分组中载入 routes.php 文件，并且该路由分组指定定了分组中路由控制器所在的命名空间。
+
 如果你在 App\Http\Controllers 目录下选择使用 PHP 命名空间嵌套或组织控制器，只需要使用相对于 App\Http\Controllers 命名空间的指定类名即可。因此，如果你的完整控制器类是 App\Http\Controllers\Photos\AdminController，你可以像这样注册路由：
 
 ```
 Route::get('foo', 'Photos\AdminController@method');
 ```
 
-## 2.2 命名控制器路由
+### 2.2 命名控制器路由
+
 和闭包路由一样，可以指定控制器路由的名字：
 
 ```
@@ -62,7 +69,7 @@ $url = action('FooController@method');
 $url = route('name');
 ```
 
-# 3、控制器中间件
+## 3、控制器中间件
 中间件可以像这样分配给控制器路由：
 
 ```
@@ -93,7 +100,7 @@ class UserController extends Controller
 }
 ```
 
-# 4、RESTful 资源控制器
+## 4、RESTful 资源控制器
 Laravel 的资源控制器使得构建围绕资源的 RESTful 控制器变得毫无痛苦，例如，你可能想要在应用中创建一个控制器，用于处理关于图片存储的 HTTP 请求，使用 Artisan 命令 make:controller，我们可以快速创建这样的控制器：
 
 ```
@@ -108,11 +115,13 @@ Route::resource('photo', 'PhotoController');
 ```
 
 这个路由声明包含了处理图片资源 RESTful 动作的多个路由，相应地，Artisan 生成的控制器也已经为这些动作设置了对应的处理方法。
-## 4.1 资源控制器处理的动作
+
+### 4.1 资源控制器处理的动作
 
 ![](images/1.png)
 
-## 4.2 只定义部分资源路由
+### 4.2 只定义部分资源路由
+
 声明资源路由时可以指定该路由处理的动作子集：
 
 ```
@@ -123,7 +132,8 @@ Route::resource('photo', 'PhotoController',
                 ['except' => ['create', 'store', 'update', 'destroy']]);
 ```
 
-## 4.3 命名资源路由
+### 4.3 命名资源路由
+
 默认情况下，所有资源控制器动作都有一个路由名称，然而，我们可以通过传入 names 数组来覆盖这些默认的名字：
 
 ```
@@ -131,7 +141,8 @@ Route::resource('photo', 'PhotoController',
                 ['names' => ['create' => 'photo.build']]);
 ```
 
-## 4.4 嵌套资源
+### 4.4 嵌套资源
+
 有时候我们需要定义路由到“嵌套”资源。例如，一个图片资源可能拥有多条“评论”，要“嵌套”资源控制器，在路由声明中使用“.”号即可：
 
 ```
@@ -165,7 +176,8 @@ class PhotoCommentController extends Controller
 }
 ```
 
-## 4.5 补充资源控制器
+### 4.5 补充资源控制器
+
 如果有必要在默认资源路由之外添加额外的路由到资源控制器，应该在调用 Route::resource 之前定义这些路由；否则，通过 resource 方法定义的路由可能无意中优先于补充的额外路由：
 
 ```
@@ -175,7 +187,8 @@ Route::resource('photos', 'PhotoController');
 
 扩展阅读：[实例教程——创建 RESTFul 风格控制器实现文章增删改查](http://laravelacademy.org/post/549.html)
 
-# 5、隐式控制器
+## 5、隐式控制器
+
 Laravel 允许你只定义一个路由即可访问控制器类中的所有动作，首先，使用 Route::controller 方法定义一个路由，该 controller 方法接收两个参数，第一个参数是控制器处理的 baseURI，第二个参数是控制器的类名：
 
 ```
@@ -226,7 +239,9 @@ class UserController extends Controller
 ```
 
 在上例中可以看到，getIndex 方法将会在访问控制器处理的默认 URI——users 时被调用。
-## 5.1 分配路由名称
+
+### 5.1 分配路由名称
+
 如果你想要命名该控制器中的一些路由，可以将一个名称数组作为第三个参数传递到该 controller 方法：
 
 ```
@@ -235,8 +250,9 @@ Route::controller('users', 'UserController', [
 ]);
 ```
 
-# 6、依赖注入 & 控制器
-## 6.1 构造函数注入
+## 6、依赖注入 & 控制器
+### 6.1 构造函数注入
+
 Laravel 使用服务容器解析所有的 Laravel 控制器，因此，可以在控制器的构造函数中类型声明任何依赖，这些依赖会被自动解析并注入到控制器实例中：
 
 ```
@@ -268,7 +284,9 @@ class UserController extends Controller
 ```
 
 当然，你还可以类型提示任何 Laravel 契约，如果容器可以解析，就可以进行类型提示。
-## 6.2 方法注入
+
+### 6.2 方法注入
+
 除了构造函数注入之外，还可以在控制器的动作方法中进行依赖的类型提示，例如，我们可以在某个方法中类型提示 Illuminate\Http\Request 实例：
 
 ```
@@ -329,7 +347,8 @@ class UserController extends Controller
 }
 ```
 
-# 7、路由缓存
+## 7、路由缓存
+
 如果你的应用完全基于路由使用控制器，可以使用 Laravel 的路由缓存，使用路由缓存将会极大减少注册所有应用路由所花费的时间开销，在某些案例中，路由注册速度甚至能提高 100 倍！想要生成路由缓存，只需执行 Artisan 命令 route:cache:
 
 ```
