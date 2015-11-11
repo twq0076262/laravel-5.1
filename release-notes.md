@@ -122,7 +122,7 @@ protected $signature = 'email:send {user} {--force}';
 更多关于 Artisan 的内容，请查看命令行一节。
 
 ### 目录结构
-为了更好地表达意图，app/Commands 目录被重命名为 app/Jobs，此外，app/Handlers 被合并到 app/Listeners 目录。然而这并不是破坏式改变所以使用 Laravel 5.1 并不强制要求更新到新的目录结构。
+为了更好地表达意图，`app/Commands` 目录被重命名为 `app/Jobs`，此外，`app/Handlers` 被合并到 `app/Listeners` 目录。然而这并不是破坏式改变所以使用 Laravel 5.1 并不强制要求更新到新的目录结构。
 
 ### 加密
-在之前的 Laravel 版本中，加密通过 PHP 扩展 mcrypt 进行处理，从5.1开始，加密改由通过 PHP 的另一个扩展 openssl 进行处理，因为该扩展较前者而言维护的更加活跃。
+在之前的 Laravel 版本中，加密通过 PHP 扩展 mcrypt 进行处理，从 5.1 开始，加密改由通过 PHP 的另一个扩展 openssl 进行处理，因为该扩展较前者而言维护的更加活跃。

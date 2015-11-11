@@ -1,13 +1,13 @@
 #  验证
 
 ## 1、简介
-Laravel 提供了多种方法来验证应用输入数据。默认情况下，Laravel 的控制器基类使用 ValidatesRequests trait，该 trait 提供了便利的方法通过各种功能强大的验证规则来验证输入的 HTTP请求。
+Laravel 提供了多种方法来验证应用输入数据。默认情况下，Laravel 的控制器基类使用 `ValidatesRequests` trait，该 trait 提供了便利的方法通过各种功能强大的验证规则来验证输入的 HTTP 请求。
 
 ## 2、快速入门
 要学习 Laravel 强大的验证特性，让我们先看一个完整的验证表单并返回错误信息给用户的例子。
 
 ### 2.1 定义路由
-首先，我们假定在 app/Http/routes.php 文件中包含如下路由：
+首先，我们假定在 `app/Http/routes.php` 文件中包含如下路由：
 
 ```
 // 显示创建博客文章表单...
@@ -19,7 +19,7 @@ Route::post('post', 'PostController@store');
 当然，GET 路由为用户显示了一个创建新的博客文章的表单，POST 路由将新的博客文章存储到数据库。
 
 ### 2.2 创建控制器
-接下来，让我们看一个处理这些路由的简单控制器示例。我们先将 store 方法留空：
+接下来，让我们看一个处理这些路由的简单控制器示例。我们先将 `store` 方法留空：
 
 ```
 <?php
@@ -54,9 +54,9 @@ class PostController extends Controller{
 ```
 
 ### 2.3 编写验证逻辑
-现在我们准备用验证新博客文章输入的逻辑填充 store 方法。如果你检查应用的控制器基类（App\Http\Controllers\Controller），你会发现该类使用了 ValidatesRequests trait，这个 trait 在所有控制器中提供了一个便利的 validate 方法。
+现在我们准备用验证新博客文章输入的逻辑填充 `store` 方法。如果你检查应用的控制器基类（`App\Http\Controllers\Controller`），你会发现该类使用了 `ValidatesRequests` trait，这个 trait 在所有控制器中提供了一个便利的 `validate` 方法。
 
-validate 方法接收一个 HTTP 请求输入数据和验证规则，如果验证规则通过，代码将会继续往下执行；然而，如果验证失败，将会抛出一个异常，相应的错误响应也会自动发送给用户。在一个传统的 HTTP 请求案例中，将会生成一个重定向响应，如果是 AJAX 请求则会返回一个 JSON 响应。
+`validate` 方法接收一个 HTTP 请求输入数据和验证规则，如果验证规则通过，代码将会继续往下执行；然而，如果验证失败，将会抛出一个异常，相应的错误响应也会自动发送给用户。在一个传统的 HTTP 请求案例中，将会生成一个重定向响应，如果是 AJAX 请求则会返回一个 JSON 响应。
 要更好的理解 validate 方法，让我们回到 store 方法：
 
 ```
@@ -76,7 +76,7 @@ public function store(Request $request){
 }
 ```
 
-正如你所看到的，我们只是传递输入的 HTTP 请求和期望的验证规则到 validate 方法，在强调一次，如果验证失败，相应的响应会自动生成。如果验证通过，控制器将会继续正常执行。
+正如你所看到的，我们只是传递输入的 HTTP 请求和期望的验证规则到 `validate` 方法，在强调一次，如果验证失败，相应的响应会自动生成。如果验证通过，控制器将会继续正常执行。
 
 #### 2.3.1 嵌套属性注意事项
 如果 HTTP 请求中包含“嵌套”参数，可以使用“.”在验证规则中指定它们：
@@ -92,7 +92,7 @@ $this->validate($request, [
 ### 2.4 显示验证错误信息
 那么，如果请求输入参数没有通过给定验证规则怎么办？正如前面所提到的，Laravel 将会自动将用户重定向回上一个位置。此外，所有验证错误信息会自动一次性存放到 session。
 
-注意我们并没有在 GET 路由中明确绑定错误信息到视图。这是因为 Laravel 总是从 session 数据中检查错误信息，而且如果有的话会自动将其绑定到视图。所以，值得注意的是每次请求的所有视图中总是存在一个`$errors` 变量，从而允许你在视图中方便而又安全地使用。`$errors` 变量是的一个 Illuminate\Support\MessageBag实例。想要了解更多关于该对象的信息，查看其文档。
+注意我们并没有在 GET 路由中明确绑定错误信息到视图。这是因为 Laravel 总是从 session 数据中检查错误信息，而且如果有的话会自动将其绑定到视图。所以，值得注意的是每次请求的所有视图中总是存在一个`$errors` 变量，从而允许你在视图中方便而又安全地使用。`$errors` 变量是的一个 `Illuminate\Support\MessageBag` 实例。想要了解更多关于该对象的信息，查看其文档。
 
 所以，在我们的例子中，验证失败的话用户将会被重定向到控制器的 create 方法，从而允许我们在视图中显示错误信息：
 
@@ -115,12 +115,12 @@ $this->validate($request, [
 ```
 
 ### 2.5 AJAX 请求&验证
-在这个例子中，我们使用传统的表单来发送数据到应用。然而，很多应用使用 AJAX 请求。在 AJAX 请求中使用 validate 方法时，Laravel 不会生成重定向响应。取而代之的，Laravel 生成一个包含验证错误信息的 JSON 响应。该 JSON 响应会带上一个 HTTP 状态码 422。
+在这个例子中，我们使用传统的表单来发送数据到应用。然而，很多应用使用 AJAX 请求。在 AJAX 请求中使用 `validate` 方法时，Laravel 不会生成重定向响应。取而代之的，Laravel 生成一个包含验证错误信息的 JSON 响应。该 JSON 响应会带上一个 HTTP 状态码` 422`。
 
 ## 3、其它验证方法
 
 ### 3.1 手动创建验证器
-如果你不想使用 ValidatesRequests trait 的 validate 方法，可以使用Validator门面手动创建一个验证器实例，该门面上的 make 方法用于生成一个新的验证器实例：
+如果你不想使用 `ValidatesRequests` trait 的 `validate` 方法，可以使用 `Validator `门面手动创建一个验证器实例，该门面上的 `make` 方法用于生成一个新的验证器实例：
 
 ```
 <?php
@@ -156,12 +156,12 @@ class PostController extends Controller{
 }
 ```
 
-传递给 make 方法的第一个参数是需要验证的数据，第二个参数是要应用到数据上的验证规则。
+传递给 `make` 方法的第一个参数是需要验证的数据，第二个参数是要应用到数据上的验证规则。
 
-检查请求是够通过验证后，可以使用 withErrors 方法将错误数据一次性存放到 session，使用该方法时，`$errors` 变量重定向后自动在视图间共享，从而允许你轻松将其显示给用户，withErrors 方法接收一个验证器、或者一个 MessageBag，又或者一个 PHP 数组。
+检查请求是够通过验证后，可以使用 `withErrors` 方法将错误数据一次性存放到 session，使用该方法时，`$errors` 变量重定向后自动在视图间共享，从而允许你轻松将其显示给用户，`withErrors` 方法接收一个验证器、或者一个 MessageBag，又或者一个 PHP 数组。
 
 #### 3.1.1 命名错误包
-如果你在单个页面上有多个表单，可能需要命名 MessageBag，从而允许你为指定表单获取错误信息。只需要传递名称作为第二个参数给 withErrors 即可：
+如果你在单个页面上有多个表单，可能需要命名 MessageBag，从而允许你为指定表单获取错误信息。只需要传递名称作为第二个参数给 `withErrors` 即可：
 
 ```
 return redirect('register')
@@ -175,7 +175,7 @@ return redirect('register')
 ```
 
 #### 3.1.2 验证钩子之后
-验证器允许你在验证完成后添加回调，这种机制允许你轻松执行更多验证，甚至添加更多错误信息到消息集合。使用验证器实例上的 after 方法即可：
+验证器允许你在验证完成后添加回调，这种机制允许你轻松执行更多验证，甚至添加更多错误信息到消息集合。使用验证器实例上的 `after` 方法即可：
 
 ```
 $validator = Validator::make(...);
@@ -192,13 +192,13 @@ if ($validator->fails()) {
 ```
 
 ### 3.2 表单请求验证
-对于更复杂的验证场景，你可能想要创建一个“表单请求”。表单请求是包含验证逻辑的自定义请求类，要创建表单验证类，可以使用 Artisan 命令 make:request：
+对于更复杂的验证场景，你可能想要创建一个“表单请求”。表单请求是包含验证逻辑的自定义请求类，要创建表单验证类，可以使用 Artisan 命令 `make:request`：
 
 ```
 php artisan make:request StoreBlogPostRequest
 ```
 
-生成的类位于 app/Http/Requests 目录下，接下来我们添加少许验证规则到 rules 方法：
+生成的类位于 `app/Http/Requests` 目录下，接下来我们添加少许验证规则到 `rules `方法：
 
 ```
 /**
@@ -228,10 +228,10 @@ public function store(StoreBlogPostRequest $request){
 }
 ```
 
-如果验证失败，重定向响应会被生成并将用户退回上一个位置，错误信息也会被一次性存储到 session 以便在视图中显示。如果是 AJAX 请求，带 422 状态码的 HTTP 响应将会返回给用户，该响应数据中还包含了 JSON 格式的验证错误信息。
+如果验证失败，重定向响应会被生成并将用户退回上一个位置，错误信息也会被一次性存储到 session 以便在视图中显示。如果是 AJAX 请求，带 `422` 状态码的 HTTP 响应将会返回给用户，该响应数据中还包含了 JSON 格式的验证错误信息。
 
 #### 3.2.1 认证表单请求
-表单请求类还包含了一个 authorize 方法，你可以检查认证用户是否有资格更新指定资源。例如，如果用户尝试更新一个博客评论，那么他是否是评论的所有者呢？举个例子：
+表单请求类还包含了一个` authorize `方法，你可以检查认证用户是否有资格更新指定资源。例如，如果用户尝试更新一个博客评论，那么他是否是评论的所有者呢？举个例子：
 
 ```
 /**
@@ -247,14 +247,14 @@ public function authorize(){
 ```
 
 
-注意上面这个例子中对 route 方法的调用。该方法赋予用户访问被调用路由 URI 参数的权限，比如下面这个例子中的{comment}参数：
+注意上面这个例子中对 `route` 方法的调用。该方法赋予用户访问被调用路由 URI 参数的权限，比如下面这个例子中的`{comment}`参数：
 
 ```
 Route::post('comment/{comment}');
 ```
 
-如果 authorize 方法返回 false，一个包含 403 状态码的 HTTP 响应会自动返回而且控制器方法将不会被执行。
-如果你计划在应用的其他部分包含认证逻辑，只需在 authorize 方法中简单返回 true 即可：
+如果 `authorize` 方法返回 `false`，一个包含` 403` 状态码的 HTTP 响应会自动返回而且控制器方法将不会被执行。
+如果你计划在应用的其他部分包含认证逻辑，只需在 `authorize `方法中简单返回 `true `即可：
 
 ```
 /**
@@ -268,7 +268,7 @@ public function authorize(){
 ```
 
 #### 3.2.2 自定义一次性错误格式
-如果你想要自定义验证失败时一次性存储到 session 中验证错误信息的格式，重写请求基类（App\Http\Requests\Request）中的 formatErrors 方法即可。不要忘记在文件顶部导入 Illuminate\Contracts\Validation\Validator 类：
+如果你想要自定义验证失败时一次性存储到 session 中验证错误信息的格式，重写请求基类（`App\Http\Requests\Request`）中的 `formatErrors` 方法即可。不要忘记在文件顶部导入 `Illuminate\Contracts\Validation\Validator` 类：
 
 ```
 /**
@@ -280,11 +280,11 @@ protected function formatErrors(Validator $validator){
 ```
 
 ## 4、处理错误信息
-调用 Validator 实例上的 errors 方法之后，将会获取一个 Illuminate\Support\MessageBag 实例，该实例中包含了多种处理错误信息的便利方法。
+调用 Validator 实例上的` errors` 方法之后，将会获取一个 `Illuminate\Support\MessageBag` 实例，该实例中包含了多种处理错误信息的便利方法。
 
 **获取某字段的第一条错误信息**
 
-要获取指定字段的第一条错误信息，可以使用 first 方法：
+要获取指定字段的第一条错误信息，可以使用 `first `方法：
 
 ```
 $messages = $validator->errors();
@@ -293,7 +293,7 @@ echo $messages->first('email');
 
 **获取指定字段的所有错误信息**
 
-如果你想要简单获取指定字段的所有错误信息数组，使用 get 方法：
+如果你想要简单获取指定字段的所有错误信息数组，使用 `get` 方法：
 
 ```
 foreach ($messages->get('email') as $message) {
@@ -303,7 +303,7 @@ foreach ($messages->get('email') as $message) {
 
 **获取所有字段的所有错误信息**
 
-要获取所有字段的所有错误信息，可以使用 all 方法：
+要获取所有字段的所有错误信息，可以使用 `all `方法：
 
 ```
 foreach ($messages->all() as $message) {
@@ -334,7 +334,7 @@ foreach ($messages->all('<li>:message</li>') as $message) {
 ```
 
 ### 4.1 自定义错误信息
-如果需要的话，你可以使用自定义错误信息替代默认的，有多种方法来指定自定义信息。首先，你可以传递自定义信息作为第三方参数给 Validator::make 方法：
+如果需要的话，你可以使用自定义错误信息替代默认的，有多种方法来指定自定义信息。首先，你可以传递自定义信息作为第三方参数给` Validator::make` 方法：
 
 ```
 $messages = [
@@ -344,7 +344,7 @@ $messages = [
 $validator = Validator::make($input, $rules, $messages);
 ```
 
-在本例中，:attribute 占位符将会被验证时实际的字段名替换，你还可以在验证消息中使用其他占位符，例如：
+在本例中，`:attribute` 占位符将会被验证时实际的字段名替换，你还可以在验证消息中使用其他占位符，例如：
 
 ```
 $messages = [
@@ -365,7 +365,7 @@ $messages = [
 ```
 
 #### 4.1.2 在语言文件中指定自定义消息
-在很多案例中，你可能想要在语言文件中指定属性特定自定义消息而不是将它们直接传递给 Validator。要实现这个，添加消息到 resources/lang/xx/validation.php 语言文件的 custom 数组：
+在很多案例中，你可能想要在语言文件中指定属性特定自定义消息而不是将它们直接传递给 `Validator`。要实现这个，添加消息到 `resources/lang/xx/validation.php` 语言文件的 custom 数组：
 
 ```
 'custom' => [
@@ -420,13 +420,13 @@ $messages = [
 -	URL
 
 ### accepted
-在验证中该字段的值必须是 yes、on、1 或 true，这在“同意服务协议”时很有用。
+在验证中该字段的值必须是 `yes`、`on`、`1 ` 或  `true`，这在“同意服务协议”时很有用。
 
 ### active_url
-该字段必须是一个基于 PHP 函数 checkdnsrr 的有效 URL
+该字段必须是一个基于 PHP 函数 `checkdnsrr `的有效 URL
 
 ### after:date
-该字段必须是给定日期后的一个值，日期将会通过 PHP 函数 strtotime 传递：
+该字段必须是给定日期后的一个值，日期将会通过 PHP 函数 `strtotime` 传递：
 
 ```
 'start_date' => 'required|date|after:tomorrow'
@@ -451,28 +451,28 @@ $messages = [
 该字段必须是 PHP 数组
 
 ### before:date
-验证字段必须是指定日期之前的一个数值，该日期将会传递给 PHP strtotime 函数。
+验证字段必须是指定日期之前的一个数值，该日期将会传递给 PHP `strtotime `函数。
 
 ### between:min,max
 验证字段尺寸在给定的最小值和最大值之间，字符串、数值和文件都可以使用该规则
 
 ### boolean
-验证字段必须可以被转化为 boolean，接收 true, false, 1,0, "1", 和 "0"等输入。
+验证字段必须可以被转化为 `boolean`，接收 `true`, `false`, `1`,`0`,` "1"`, 和 `"0"` 等输入。
 
 ### confirmed
-验证字段必须有一个匹配字段 foo_confirmation，例如，如果验证字段是 password，必须输入一个与之匹配的 password_confirmation 字段
+验证字段必须有一个匹配字段 `foo_confirmation`，例如，如果验证字段是 `password`，必须输入一个与之匹配的 `password_confirmation` 字段
 
 ### date
-验证字段必须是一个基于 PHP strtotime 函数的有效日期
+验证字段必须是一个基于 PHP `strtotime `函数的有效日期
 
 ### date_format:format
-验证字段必须匹配指定格式，该格式将使用 PHP 函数 date_parse_from_format 进行验证。你应该在验证字段时使用 date 或 date_format
+验证字段必须匹配指定格式，该格式将使用 PHP 函数 `date_parse_from_format` 进行验证。你应该在验证字段时使用 `date` 或 `date_format`
 
 ### different:field
 验证字段必须是一个和指定字段不同的值
 
 ### digits:value
-验证字段必须是数字且长度为 value 指定的值
+验证字段必须是数字且长度为 `value` 指定的值
 
 ### digits_between:min,max
 验证字段数值长度必须介于最小值和最大值之间
@@ -495,7 +495,7 @@ $messages = [
 'state' => 'exists:states,abbreviation'
 ```
 
-还可以添加更多查询条件到 where 查询子句：
+还可以添加更多查询条件到 `where` 查询子句：
 
 ```
 'email' => 'exists:staff,email,account_id,1'
@@ -535,7 +535,7 @@ MIMIE 规则的基本使用：
 
 - **regex:pattern**
 验证字段必须匹配给定正则表达式
-注意：使用 regex 模式时，规则必须放在数组中，而不能使用管道分隔符，尤其是正则表达式中使用管道符号时。
+注意：使用 `regex `模式时，规则必须放在数组中，而不能使用管道分隔符，尤其是正则表达式中使用管道符号时。
 
 - **required**
 验证字段时必须的
@@ -559,16 +559,16 @@ MIMIE 规则的基本使用：
 给定字段和验证字段必须匹配
 
 - **size:value**
-验证字段必须有和给定值相 value 匹配的尺寸，对字符串而言，value 是相应的字符数目；对数值而言，value 是给定整型值；对文件而言，value 是相应的文件字节数
+验证字段必须有和给定值相 value 匹配的尺寸，对字符串而言，`value` 是相应的字符数目；对数值而言，`value` 是给定整型值；对文件而言，`value` 是相应的文件字节数
 
 - **string**
 验证字段必须是字符串
 
 - **timezone**
-验证字符必须是基于 PHP 函数 timezone_identifiers_list 的有效时区标识
+验证字符必须是基于 PHP 函数 `timezone_identifiers_list` 的有效时区标识
 
 - **unique:table,column,except,idColumn**
-验证字段在给定数据表上必须是唯一的，如果不指定 column 选项，字段名将作为默认 column。
+验证字段在给定数据表上必须是唯一的，如果不指定 `column` 选项，字段名将作为默认 `column`。
 指定自定义列名：
 
 ```
@@ -576,7 +576,7 @@ MIMIE 规则的基本使用：
 ```
 
 - **自定义数据库连接**
-有时候，你可能需要自定义验证器生成的数据库连接，正如上面所看到的，设置 unique:users 作为验证规则将会使用默认数据库连接来查询数据库。要覆盖默认连接，在数据表名后使用”.“指定连接：
+有时候，你可能需要自定义验证器生成的数据库连接，正如上面所看到的，设置 `unique:users` 作为验证规则将会使用默认数据库连接来查询数据库。要覆盖默认连接，在数据表名后使用”.“指定连接：
 
 ```
 'email' => 'unique:connection.users,email_address'
@@ -590,17 +590,17 @@ MIMIE 规则的基本使用：
 ```
 
 - **添加额外的 where 子句：**
-还可以指定更多条件给 where 子句：
+还可以指定更多条件给 `where` 子句：
 
 ```
 'email' => 'unique:users,email_address,NULL,id,account_id,1'
 ```
 
 - **url**
-验证字段必须是基于 PHP 函数 filter_var 过滤的的有效 URL
+验证字段必须是基于 PHP 函数 `filter_var` 过滤的的有效 URL
 
 ## 6、添加条件规则
-在某些场景下，你可能想要只有某个字段存在的情况下运行验证检查，要快速完成这个，添加 sometimes 规则到规则列表：
+在某些场景下，你可能想要只有某个字段存在的情况下运行验证检查，要快速完成这个，添加 `sometimes` 规则到规则列表：
 
 ```
 $v = Validator::make($data, [
@@ -611,7 +611,7 @@ $v = Validator::make($data, [
 在上例中，email 字段只有存在于`$data` 数组时才会被验证。
 
 **复杂条件验证**
-有时候你可能想要基于更复杂的条件逻辑添加验证规则。例如，你可能想要只有在另一个字段值大于 100 时才要求一个给定字段是必须的，或者，你可能需要只有当另一个字段存在时两个字段才都有给定值。添加这个验证规则并不是一件头疼的事。首先，创建一个永远不会改变的静态规则到 Validator 实例：
+有时候你可能想要基于更复杂的条件逻辑添加验证规则。例如，你可能想要只有在另一个字段值大于 `100` 时才要求一个给定字段是必须的，或者，你可能需要只有当另一个字段存在时两个字段才都有给定值。添加这个验证规则并不是一件头疼的事。首先，创建一个永远不会改变的静态规则到 Validator 实例：
 
 ```
 $v = Validator::make($data, [
@@ -620,7 +620,7 @@ $v = Validator::make($data, [
 ]);
 ```
 
-让我们假定我们的 web 应用服务于游戏收集者。如果一个游戏收集者注册了我们的应用并拥有超过 100 个游戏，我们想要他们解释为什么他们会有这么多游戏，例如，也许他们在运营一个游戏二手店，又或者他们只是喜欢收集。要添加这种条件，我们可以使用 Validator 实例上的 sometimes 方法：
+让我们假定我们的 web 应用服务于游戏收集者。如果一个游戏收集者注册了我们的应用并拥有超过 `100` 个游戏，我们想要他们解释为什么他们会有这么多游戏，例如，也许他们在运营一个游戏二手店，又或者他们只是喜欢收集。要添加这种条件，我们可以使用 Validator 实例上的 `sometimes` 方法：
 
 ```
 $v->sometimes('reason', 'required|max:500', function($input) {
@@ -628,7 +628,7 @@ $v->sometimes('reason', 'required|max:500', function($input) {
 });
 ```
 
-传递给 sometimes 方法的第一个参数是我们需要有条件验证的名称字段，第二个参数是我们想要添加的规则，如果作为第三个参数的闭包返回 true，规则被添加。该方法让构建复杂条件验证变得简单，你甚至可以一次为多个字段添加条件验证：
+传递给 `sometimes` 方法的第一个参数是我们需要有条件验证的名称字段，第二个参数是我们想要添加的规则，如果作为第三个参数的闭包返回` true`，规则被添加。该方法让构建复杂条件验证变得简单，你甚至可以一次为多个字段添加条件验证：
 
 ```
 $v->sometimes(['reason', 'cost'], 'required', function($input) {
@@ -636,10 +636,10 @@ $v->sometimes(['reason', 'cost'], 'required', function($input) {
 });
 ```
 
-注意：传递给闭包的`$input` 参数是 Illuminate\Support\Fluent 的一个实例，可用于访问输入和文件。
+注意：传递给闭包的`$input` 参数是 `Illuminate\Support\Fluent` 的一个实例，可用于访问输入和文件。
 
 # 7、自定义验证规则
-Laravel 提供了多种有用的验证规则；然而，你可能还是想要指定一些自己的验证规则。注册验证规则的一种方法是使用 Validator门面的 extend 方法。让我们在服务提供者中使用这种方法来注册一个自定义的验证规则：
+Laravel 提供了多种有用的验证规则；然而，你可能还是想要指定一些自己的验证规则。注册验证规则的一种方法是使用` Validator`门面的 extend 方法。让我们在服务提供者中使用这种方法来注册一个自定义的验证规则：
 
 ```
 <?php
@@ -675,7 +675,7 @@ class AppServiceProvider extends ServiceProvider{
 ```
 
 自定义验证器闭包接收三个参数：要验证的属性名称，属性值和传递给规则的参数数组。
-你还可以传递类和方法到 extend 方法而不是闭包：
+你还可以传递类和方法到 `extend` 方法而不是闭包：
 
 ```
 Validator::extend('foo', 'FooValidator@validate');
@@ -690,7 +690,7 @@ Validator::extend('foo', 'FooValidator@validate');
 // 验证错误信息其它部分...
 ```
 
-当创建一个自定义验证规则时，你可能有时候需要为错误信息定义自定义占位符，可以通过创建自定义验证器然后调用 Validator 门面上的 replacer 方法来实现。可以在服务提供者的 boot 方法中编写代码：
+当创建一个自定义验证规则时，你可能有时候需要为错误信息定义自定义占位符，可以通过创建自定义验证器然后调用` Validator `门面上的` replacer `方法来实现。可以在服务提供者的` boot` 方法中编写代码：
 
 ```
 /**

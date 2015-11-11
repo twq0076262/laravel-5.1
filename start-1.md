@@ -9,7 +9,7 @@ Laravel 让连接多种数据库和运行查询都变得非常简单，不论使
 - 	SQL Server
 
 ### 1.1 配置
-Laravel 让连接数据库和运行查询都变得非常简单。应用的数据库配置位于 config/database.php。在该文件中你可以定义所有的数据库连接，并指定哪个连接是默认连接。该文件中提供了所有支持数据库系统的配置示例。
+Laravel 让连接数据库和运行查询都变得非常简单。应用的数据库配置位于 `config/database.php`。在该文件中你可以定义所有的数据库连接，并指定哪个连接是默认连接。该文件中提供了所有支持数据库系统的配置示例。
 默认情况下，Laravel 示例环境配置已经为 Laravel Homestead 做好准备，当然，你也可以按照需要为本地的数据库修改该配置。
 
 #### 1.1.1 读/写连接
@@ -34,15 +34,15 @@ Laravel 让连接数据库和运行查询都变得非常简单。应用的数据
 ],
 ```
 
-注意我们在配置数组中新增了两个键：read 和 write，这两个键都对应一个包含单个键“host”的数组，读/写连接的其它数据库配置选项都共用 mysql 的主数组配置。
+注意我们在配置数组中新增了两个键：`read` 和 `write`，这两个键都对应一个包含单个键“host”的数组，读/写连接的其它数据库配置选项都共用 mysql 的主数组配置。
 
-如果我们想要覆盖主数组中的配置，只需要将相应配置项放到 read 和 write 数组中即可。在本例中，192.168.1.1 将被用作“读”连接，而 192.168.1.2 将被用作“写”连接。数据库的凭证、前缀、字符集和所有 mysql 数组中的其它配置将会两个连接共享。
+如果我们想要覆盖主数组中的配置，只需要将相应配置项放到` read` 和` write `数组中即可。在本例中，`192.168.1.1 `将被用作“读”连接，而 `192.168.1.2` 将被用作“写”连接。数据库的凭证、前缀、字符集和所有 mysql 数组中的其它配置将会两个连接共享。
 
 ## 2、运行原生 SQL 查询
-一旦你配置好数据库连接后，就可以使用 DB 门面来运行查询。DB 门面为每种查询提供了相应方法：select, update, insert, delete, 和 statement。
+一旦你配置好数据库连接后，就可以使用 `DB` 门面来运行查询。`DB` 门面为每种查询提供了相应方法：`select`, `update`, `insert`, `delete`, 和 `statement`。
 
 ### 2.1 运行 Select 查询
-运行一个最基本的查询，可以使用 DB 门面的 select 方法：
+运行一个最基本的查询，可以使用 `DB` 门面的 `select` 方法：
 
 ```
 <?php
@@ -66,9 +66,9 @@ class UserController extends Controller{
 }
 ```
 
-传递给 select 方法的第一个参数是原生的 SQL 语句，第二个参数需要绑定到查询的参数绑定，通常，这些都是 where 字句约束中的值。参数绑定可以避免 SQL 注入攻击。
+传递给 `select` 方法的第一个参数是原生的 SQL 语句，第二个参数需要绑定到查询的参数绑定，通常，这些都是 `where` 字句约束中的值。参数绑定可以避免 SQL 注入攻击。
 
-select 方法以数组的形式返回结果集，数组中的每一个结果都是一个 PHP StdClass 对象，从而允许你像下面这样访问结果值：
+`select` 方法以数组的形式返回结果集，数组中的每一个结果都是一个 PHP `StdClass` 对象，从而允许你像下面这样访问结果值：
 
 ```
 foreach ($users as $user) {
@@ -77,42 +77,42 @@ foreach ($users as $user) {
 ```
 
 ### 2.2 使用命名绑定
-除了使用?占位符来代表参数绑定外，还可以使用命名绑定来执行查询：
+除了使用`?`占位符来代表参数绑定外，还可以使用命名绑定来执行查询：
 
 ```
 $results = DB::select('select * from users where id = :id', ['id' => 1]);
 ```
 
 ### 2.3 运行插入语句
-使用 DB 门面的 insert 方法执行插入语句。和 select 一样，改方法将原生 SQL 语句作为第一个参数，将绑定作为第二个参数：
+使用 `DB` 门面的 `insert` 方法执行插入语句。和 `select` 一样，改方法将原生 SQL 语句作为第一个参数，将绑定作为第二个参数：
 
 ```
 DB::insert('insert into users (id, name) values (?, ?)', [1, 'Dayle']);
 ```
 
 ### 2.4 运行更新语句
-update 方法用于更新数据库中已存在的记录，该方法返回受更新语句影响的行数：
+`update` 方法用于更新数据库中已存在的记录，该方法返回受更新语句影响的行数：
 
 ```
 $affected = DB::update('update users set votes = 100 where name = ?', ['John']);
 ```
 
 ### 2.5 运行删除语句
-delete 方法用于删除数据库中已存在的记录，和 update 一样，该语句返回被删除的行数：
+`delete` 方法用于删除数据库中已存在的记录，和 `update` 一样，该语句返回被删除的行数：
 
 ```
 $deleted = DB::delete('delete from users');
 ```
 
 ### 2.6 运行一个通用语句
-有些数据库语句不返回任何值，对于这种类型的操作，可以使用 DB 门面的 statement 方法：
+有些数据库语句不返回任何值，对于这种类型的操作，可以使用 `DB` 门面的 `statement` 方法：
 
 ```
 DB::statement('drop table users');
 ```
 
 ### 2.7 监听查询事件
-如果你想要获取应用中每次 SQL 语句的执行，可以使用 listen 方法，该方法对查询日志和调试非常有用，你可以在服务提供者中注册查询监听器：
+如果你想要获取应用中每次 SQL 语句的执行，可以使用 `listen `方法，该方法对查询日志和调试非常有用，你可以在服务提供者中注册查询监听器：
 
 ```
 <?php
@@ -148,7 +148,7 @@ class AppServiceProvider extends ServiceProvider{
 ```
 
 ## 3、数据库事务
-想要在一个数据库事务中运行一连串操作，可以使用 DB 门面的 transaction 方法，如果事务闭包中抛出异常，事务将会自动回滚。如果闭包执行成功，事务将会自动提交。使用 transaction 方法时不需要担心手动回滚或提交：
+想要在一个数据库事务中运行一连串操作，可以使用 `DB` 门面的 `transaction `方法，如果事务闭包中抛出异常，事务将会自动回滚。如果闭包执行成功，事务将会自动提交。使用 `transaction `方法时不需要担心手动回滚或提交：
 
 ```
 DB::transaction(function () {
@@ -158,34 +158,34 @@ DB::transaction(function () {
 ```
 
 ### 3.1 手动使用事务
-如果你想要手动开始事务从而对回滚和提交有一个完整的控制，可以使用 DB 门面的 beginTransaction 方法：
+如果你想要手动开始事务从而对回滚和提交有一个完整的控制，可以使用 DB 门面的 `beginTransaction` 方法：
 
 ```
 DB::beginTransaction();
 ```
 
-你可以通过 rollBack 方法回滚事务：
+你可以通过 `rollBack` 方法回滚事务：
 
 ```
 DB::rollBack();
 ```
 
-最后，你可以通过 commit 方法提交事务：
+最后，你可以通过 `commit` 方法提交事务：
 
 ```
 DB::commit();
 ```
 
-注意：使用 DB 门面的事务方法还可以用于控制查询构建器和Eloquent ORM的事务。
+注意：使用 `DB` 门面的事务方法还可以用于控制查询构建器和 Eloquent ORM 的事务。
 
 ## 4、使用多个数据库连接
-使用多个数据库连接的时候，可以使用 DB 门面的 connection 方法访问每个连接。传递给 connection 方法的连接名对应配置文件 config/database.php 中相应的连接：
+使用多个数据库连接的时候，可以使用 `DB` 门面的 `connection` 方法访问每个连接。传递给 `connection` 方法的连接名对应配置文件` config/database.php `中相应的连接：
 
 ```
 $users = DB::connection('foo')->select(...);
 ```
 
-你还可以通过连接实例上的 getPdo 方法底层原生的 PDO 实例：
+你还可以通过连接实例上的` getPdo` 方法底层原生的 PDO 实例：
 
 ```
 $pdo = DB::connection()->getPdo();

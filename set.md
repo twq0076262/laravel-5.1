@@ -1,7 +1,7 @@
 # 集合
 
 ## 1、简介 
-Eloquent 返回的所有多结果集都是 Illuminate\Database\Eloquent\Collection 对象的实例，包括通过 get 方法或者通过访问关联关系获取的结果。Eloquent 集合对象继承自 Laravel 的集合基类，因此很自然的继承了很多处理 Eloquent 模型底层数组的方法。
+Eloquent 返回的所有多结果集都是 `Illuminate\Database\Eloquent\Collection` 对象的实例，包括通过 get 方法或者通过访问关联关系获取的结果。Eloquent 集合对象继承自 Laravel 的集合基类，因此很自然的继承了很多处理 Eloquent 模型底层数组的方法。
 当然，所有集合也是迭代器，允许你像数组一样对其进行循环：
 
 ```
@@ -24,10 +24,10 @@ $names = $users->reject(function ($user) {
 ```
 
 ## 2、可用方法
-所有的 Eloquent 集合继承自Laravel 集合基类，因此，它们继承所有集合基类提供的强大方法：详见集合有效方法列表。
+所有的 Eloquent 集合继承自 Laravel 集合基类，因此，它们继承所有集合基类提供的强大方法：详见集合有效方法列表。
 
 ## 3、自定义集合
-如果你需要在自己扩展的方法中使用自定义的集合对象，可以重写模型上的 newCollection 方法：
+如果你需要在自己扩展的方法中使用自定义的集合对象，可以重写模型上的 `newCollection `方法：
 
 ```
 <?php
@@ -51,4 +51,4 @@ class User extends Model{
 }
 ```
 
-定义好 newCollection 方法后，无论何时 Eloquent 返回该模型的 Collection 实例你都会获取到自定义的集合。如果你想要在应用中的每一个模型中使用自定义集合，需要在模型基类中重写 newCollection 方法。
+定义好 `newCollection `方法后，无论何时 Eloquent 返回该模型的 `Collection` 实例你都会获取到自定义的集合。如果你想要在应用中的每一个模型中使用自定义集合，需要在模型基类中重写 `newCollection` 方法。

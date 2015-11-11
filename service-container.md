@@ -43,7 +43,7 @@ class PurchasePodcast implements SelfHandling{
 }
 ```
 
-在本例中，当播客被购买后 PurchasePodcast 任务需要发送邮件，因此，你需要注入一个可以发送邮件的服务。由于该服务是被注入的，我们可以方便的使用其另一个实现来替换它，在测试的时候我们还可以”模拟“或创建一个假的邮件实现。
+在本例中，当播客被购买后 `PurchasePodcast` 任务需要发送邮件，因此，你需要注入一个可以发送邮件的服务。由于该服务是被注入的，我们可以方便的使用其另一个实现来替换它，在测试的时候我们还可以”模拟“或创建一个假的邮件实现。
 
 深入理解 Laravel 服务容器对于构建功能强大的大型 Laravel 应用而言至关重要，对于贡献代码到 Laravel 核心也很有帮助。
 
@@ -61,7 +61,7 @@ $this->app->bind('HelpSpot\API', function ($app) {
 注意到我们接受容器本身作为解析器的一个参数，然后我们可以使用该容器来解析我们正在构建的对象的子依赖。
 
 **绑定一个单例**
-singleton 方法绑定一个只需要解析一次的类或接口到容器，然后接下来对容器的调用将会返回同一个实例：
+`singleton` 方法绑定一个只需要解析一次的类或接口到容器，然后接下来对容器的调用将会返回同一个实例：
 
 ```
 $this->app->singleton('FooBar', function ($app) {
@@ -70,7 +70,7 @@ $this->app->singleton('FooBar', function ($app) {
 ```
 
 **绑定实例**
-你还可以使用 instance 方法绑定一个已存在的对象实例到容器，随后对容器的调用将总是返回给定的实例：
+你还可以使用 `instance` 方法绑定一个已存在的对象实例到容器，随后对容器的调用将总是返回给定的实例：
 
 ```
 $fooBar = new FooBar(new SomethingElse);
@@ -79,13 +79,13 @@ $this->app->instance('FooBar', $fooBar);
 ```
 
 ### 2.1 绑定接口到实现
-服务容器的一个非常强大的特性是其绑定接口到实现的能力。我们假设有一个 EventPusher 接口及其 RedisEventPusher 实现，编写完该接口的 RedisEventPusher 实现后，就可以将其注册到服务容器：
+服务容器的一个非常强大的特性是其绑定接口到实现的能力。我们假设有一个 `EventPusher` 接口及其` RedisEventPusher `实现，编写完该接口的 `RedisEventPusher `实现后，就可以将其注册到服务容器：
 
 ```
 $this->app->bind('App\Contracts\EventPusher', 'App\Services\RedisEventPusher');
 ```
 
-这段代码告诉容器当一个类需要 EventPusher 的实现时将会注入 RedisEventPusher，现在我们可以在构造器或者任何其它通过服务容器注入依赖的地方进行 EventPusher 接口的类型提示：
+这段代码告诉容器当一个类需要` EventPusher `的实现时将会注入 `RedisEventPusher`，现在我们可以在构造器或者任何其它通过服务容器注入依赖的地方进行 EventPusher 接口的类型提示：
 
 ```
 use App\Contracts\EventPusher;
@@ -117,7 +117,7 @@ $this->app->when('App\Handlers\Commands\CreateOrderHandler')
 ```
 
 ## 2.3 标签
-少数情况下我们需要解析特定分类下的所有绑定，比如，也许你正在构建一个接收多个不同 Report 接口实现的报告聚合器，在注册完 Report 实现之后，可以通过 tag 方法给它们分配一个标签：
+少数情况下我们需要解析特定分类下的所有绑定，比如，也许你正在构建一个接收多个不同 `Report` 接口实现的报告聚合器，在注册完` Report` 实现之后，可以通过 tag 方法给它们分配一个标签：
 
 ```
 $this->app->bind('SpeedReport', function () {
@@ -131,7 +131,7 @@ $this->app->bind('MemoryReport', function () {
 $this->app->tag(['SpeedReport', 'MemoryReport'], 'reports');
 ```
 
-这些服务被打上标签后，可以通过 tagged 方法来轻松解析它们：
+这些服务被打上标签后，可以通过` tagged `方法来轻松解析它们：
 
 ```
 $this->app->bind('ReportAggregator', function ($app) {
@@ -140,13 +140,13 @@ $this->app->bind('ReportAggregator', function ($app) {
 ```
 
 # 3、解析
-有很多方式可以从容器中解析对象，首先，你可以使用 make 方法，该方法接收你想要解析的类名或接口名作为参数：
+有很多方式可以从容器中解析对象，首先，你可以使用` make `方法，该方法接收你想要解析的类名或接口名作为参数：
 
 ```
 $fooBar = $this->app->make('FooBar');
 ```
 
-其次，你可以以数组方式访问容器，因为其实现了 PHP 的 ArrayAccess 接口：
+其次，你可以以数组方式访问容器，因为其实现了 PHP 的 `ArrayAccess` 接口：
 
 ```
 $fooBar = $this->app['FooBar'];
@@ -194,7 +194,7 @@ class UserController extends Controller{
 ```
 
 # 4、容器事件
-服务容器在每一次解析对象时都会触发一个事件，可以使用 resolving 方法监听该事件：
+服务容器在每一次解析对象时都会触发一个事件，可以使用 `resolving `方法监听该事件：
 
 ```
 $this->app->resolving(function ($object, $app) {

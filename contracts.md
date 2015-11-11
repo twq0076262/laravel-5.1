@@ -1,7 +1,7 @@
 # 契约
 
 ## 1、简介
-Laravel 的契约是指框架提供的一系列定义核心服务的接口。比如，Illuminate\Contracts\Queue\Queue 契约定义了队列任务需要的方法，Illuminate\Contracts\Mail\Mailer 契约定义了发送邮件所需要的方法。
+Laravel 的契约是指框架提供的一系列定义核心服务的接口。比如，`Illuminate\Contracts\Queue\Queue` 契约定义了队列任务需要的方法，`Illuminate\Contracts\Mail\Mailer` 契约定义了发送邮件所需要的方法。
 
 每一个契约都有框架提供的相应实现。比如，Laravel 提供了多个驱动的队列实现，邮件实现则由 SwiftMailer 驱动。
 

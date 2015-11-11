@@ -1,7 +1,7 @@
 # 集合
 
 # 1、简介
-Illuminate\Support\Collection 类为处理数组数据提供了平滑、方便的封装。例如，查看下面的代码，我们使用帮助函数 collect 创建一个新的集合实例，为每一个元素运行 strtoupper 函数，然后移除所有空元素：
+`Illuminate\Support\Collection` 类为处理数组数据提供了平滑、方便的封装。例如，查看下面的代码，我们使用帮助函数 `collect `创建一个新的集合实例，为每一个元素运行 `strtoupper `函数，然后移除所有空元素：
 
 ```
 $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
@@ -11,17 +11,17 @@ $collection = collect(['taylor', 'abigail', null])->map(function ($name) {
               });
 ```
 
-正如你所看到的，Collection 类允许你使用方法链对底层数组执行匹配和减少操作，通常，没个 Collection 方法都会返回一个新的 Collection 实例。
+正如你所看到的，`Collection `类允许你使用方法链对底层数组执行匹配和减少操作，通常，没个 `Collection `方法都会返回一个新的 `Collection `实例。
 # 2、创建集合
-正如上面所提到的，帮助函数 collect 为给定数组返回一个新的 Illuminate\Support\Collection 实例，所以，创建集合很简单：
+正如上面所提到的，帮助函数 `collect `为给定数组返回一个新的 `Illuminate\Support\Collection `实例，所以，创建集合很简单：
 
 ```
 $collection = collect([1, 2, 3]);
 ```
 
-默认情况下，Eloquent 模型的集合总是返回 Collection 实例，此外，不管是在何处，只要方法都可以自由使用 Collection 类。
+默认情况下， `Eloquent `模型的集合总是返回 `Collection `实例，此外，不管是在何处，只要方法都可以自由使用 `Collection `类。
 # 3、集合方法列表
-本文档接下来的部分我们将会讨论 Collection 类上每一个有效的方法，所有这些方法都可以以方法链的方式平滑的操作底层数组。此外，几乎每个方法返回一个新的 Collection 实例，允许你在必要的时候保持原来的集合备份。
+本文档接下来的部分我们将会讨论 `Collection `类上每一个有效的方法，所有这些方法都可以以方法链的方式平滑的操作底层数组。此外，几乎每个方法返回一个新的 `Collection `实例，允许你在必要的时候保持原来的集合备份。
 ## all()
 all 方法简单返回集合表示的底层数组：
 
@@ -40,7 +40,7 @@ $chunks->toArray();
 // [[1, 2, 3, 4], [5, 6, 7]]
 ```
 
-当处理栅栏系统如Bootstrap时该方法在视图中尤其有用，建设你有一个想要显示在栅栏中的Eloquent模型集合：
+当处理栅栏系统如 Bootstrap 时该方法在视图中尤其有用，建设你有一个想要显示在栅栏中的 Eloquent 模型集合：
 
 ```
 @foreach ($products->chunk(3) as $chunk)
@@ -53,7 +53,7 @@ $chunks->toArray();
 ```
 
 ## collapse()
-collapse 方法将一个多维数组集合收缩成一个一维数组：
+`collapse` 方法将一个多维数组集合收缩成一个一维数组：
 
 ```
 $collection = collect([[1, 2, 3], [4, 5, 6], [7, 8, 9]]);
@@ -63,7 +63,7 @@ $collapsed->all();
 ```
 
 ## contains()
-contains 方法判断集合是否包含一个给定项：
+`contains` 方法判断集合是否包含一个给定项：
 
 ```
 $collection = collect(['name' => 'Desk', 'price' => 100]);
@@ -74,7 +74,7 @@ $collection->contains('New York');
 // false
 ```
 
-你还可以传递一个键值对到 contains 方法，这将会判断给定键值对是否存在于集合中：
+你还可以传递一个键值对到 `contains `方法，这将会判断给定键值对是否存在于集合中：
 
 ```
 $collection = collect([
@@ -86,7 +86,7 @@ $collection->contains('product', 'Bookcase');
 // false
 ```
 
-最后，你还可以传递一个回调到 contains 方法来执行自己的真实测试：
+最后，你还可以传递一个回调到 `contains `方法来执行自己的真实测试：
 
 ```
 $collection = collect([1, 2, 3, 4, 5]);
@@ -97,7 +97,7 @@ $collection->contains(function ($key, $value) {
 ```
 
 ## count()
-count 方法返回集合中所有项的数目：
+`count` 方法返回集合中所有项的数目：
 
 ```
 $collection = collect([1, 2, 3, 4]);
@@ -106,7 +106,7 @@ $collection->count();
 ```
 
 ## diff()
-diff 方法将集合和另一个集合或原生 PHP 数组作比较：
+`diff` 方法将集合和另一个集合或原生 `PHP `数组作比较：
 
 ```
 $collection = collect([1, 2, 3, 4, 5]);
@@ -116,7 +116,7 @@ $diff->all();
 ```
 
 ## each()
-each 方法迭代集合中的数据项并传递每个数据项到给定回调：
+`each` 方法迭代集合中的数据项并传递每个数据项到给定回调：
 
 ```
 $collection = $collection->each(function ($item, $key) {
@@ -124,7 +124,7 @@ $collection = $collection->each(function ($item, $key) {
 });
 ```
 
-回调返回 false 将会终止循环：
+回调返回 `false `将会终止循环：
 
 ```
 $collection = $collection->each(function ($item, $key) {
@@ -135,7 +135,7 @@ $collection = $collection->each(function ($item, $key) {
 ```
 
 ## filter()
-filter 方法通过给定回调过滤集合，只有通过给定测试的数据项才会保留下来：
+`filter` 方法通过给定回调过滤集合，只有通过给定测试的数据项才会保留下来：
 
 ```
 $collection = collect([1, 2, 3, 4]);
@@ -148,7 +148,7 @@ $filtered->all();
 // [3, 4]
 ```
 
-和 filter 相反的方法是reject。
+和 `filter `相反的方法是`reject`。
 ## first()
 first 方法返回通过测试集合的第一个元素：
 
@@ -159,7 +159,7 @@ collect([1, 2, 3, 4])->first(function ($key, $value) {
 // 3
 ```
 
-你还可以调用不带参数的 first 方法来获取集合的第一个元素，如果集合是空的，返回 null：
+你还可以调用不带参数的 `first `方法来获取集合的第一个元素，如果集合是空的，返回 `null`：
 
 ```
 collect([1, 2, 3, 4])->first();
@@ -167,7 +167,7 @@ collect([1, 2, 3, 4])->first();
 ```
 
 ## flatten()
-flatten 方法将多维度的集合变成一维的：
+`flatten` 方法将多维度的集合变成一维的：
 
 ```
 $collection = collect(['name' => 'taylor', 'languages' => ['php', 'javascript']]);
@@ -177,7 +177,7 @@ $flattened->all();
 ```
 
 ## flip()
-flip 方法将集合的键值做交换：
+`flip` 方法将集合的键值做交换：
 
 ```
 $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
@@ -187,7 +187,7 @@ $flipped->all();
 ```
 
 ## forget()
-forget 方法通过键从集合中移除数据项：
+`forget` 方法通过键从集合中移除数据项：
 
 ```
 $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
@@ -196,9 +196,9 @@ $collection->all();
 // [framework' => 'laravel']
 ```
 
-注意：不同于大多数的集合方法，forget 不返回新的修改过的集合；它只修改所调用的集合。
+注意：不同于大多数的集合方法，`forget`不返回新的修改过的集合；它只修改所调用的集合。
 ## forPage()
-forPage 方法返回新的包含给定页数数据项的集合：
+`forPage` 方法返回新的包含给定页数数据项的集合：
 
 ```
 $collection = collect([1, 2, 3, 4, 5, 6, 7, 8, 9])->forPage(2, 3);
@@ -209,7 +209,7 @@ $collection->all();
 
 该方法需要传入页数和每页显示数目参数。
 ## get()
-get 方法返回给定键的数据项，如果不存在，返回 null：
+`get` 方法返回给定键的数据项，如果不存在，返回 null`：
 
 ```
 $collection = collect(['name' => 'taylor', 'framework' => 'laravel']);
@@ -234,7 +234,7 @@ return 'default-value';});
 ```
 
 ## groupBy()
-groupBy 方法通过给定键分组集合数据项：
+`groupBy` 方法通过给定键分组集合数据项：
 
 ```
 $collection = collect([
@@ -260,7 +260,7 @@ $grouped->toArray();
 */
 ```
 
-除了传递字符串 key，还可以传递一个回调，回调应该返回分组后的值：
+除了传递字符串 `key`，还可以传递一个回调，回调应该返回分组后的值：
 
 ```
 $grouped = $collection->groupBy(function ($item, $key) {
@@ -283,7 +283,7 @@ $grouped->toArray();
 ```
 
 ## has()
-has 方法判断给定键是否在集合中存在：
+`has` 方法判断给定键是否在集合中存在：
 
 ```
 $collection = collect(['account_id' => 1, 'product' => 'Desk']);
@@ -292,7 +292,7 @@ $collection->has('email');
 ```
 
 ## implode()
-implode 方法连接集合中的数据项。其参数取决于集合中数据项的类型。
+`implode` 方法连接集合中的数据项。其参数取决于集合中数据项的类型。
 如果集合包含数组或对象，应该传递你想要连接的属性键，以及你想要放在值之间的 “粘合”字符串：
 
 ```
@@ -313,7 +313,7 @@ collect([1, 2, 3, 4, 5])->implode('-');
 ```
 
 ## intersect()
-intersect 方法返回两个集合的交集：
+`intersect` 方法返回两个集合的交集：
 
 ```
 $collection = collect(['Desk', 'Sofa', 'Chair']);
@@ -324,8 +324,8 @@ $intersect->all();
 
 正如你所看到的，结果集合只保持原来集合的键。
 ## isEmpty()
-如果集合为空的话 isEmpty 方法返回 true；否则返回 false：
-
+如果集合为空的话 `isEmpty `方法返回 `true；`否则返回 `false：
+`
 ```
 collect([])->isEmpty();
 // true
@@ -371,7 +371,7 @@ $keyed->all();
 ```
 
 ## keys()
-keys 方法返回所有集合的键：
+`keys` 方法返回所有集合的键：
 
 ```
 $collection = collect([
@@ -386,7 +386,7 @@ $keys->all();
 ```
 
 ## last()
-last 方法返回通过测试的集合的最后一个元素：
+`last` 方法返回通过测试的集合的最后一个元素：
 
 ```
 collect([1, 2, 3, 4])->last(function ($key, $value) {
@@ -395,7 +395,7 @@ collect([1, 2, 3, 4])->last(function ($key, $value) {
 // 2
 ```
 
-还可以调用无参的 last 方法来获取集合的最后一个元素。如果集合为空。返回 null：
+还可以调用无参的 `last `方法来获取集合的最后一个元素。如果集合为空。返回 `null：`
 
 ```
 collect([1, 2, 3, 4])->last();
@@ -403,7 +403,7 @@ collect([1, 2, 3, 4])->last();
 ```
 
 ## map()
-map 方法遍历集合并传递每个值给给定回调。该回调可以修改数据项并返回，从而生成一个新的经过修改的集合：
+`map` 方法遍历集合并传递每个值给给定回调。该回调可以修改数据项并返回，从而生成一个新的经过修改的集合：
 
 ```
 $collection = collect([1, 2, 3, 4, 5]);
@@ -416,9 +416,9 @@ $multiplied->all();
 // [2, 4, 6, 8, 10]
 ```
 
-注意：和大多数集合方法一样，map 返回新的集合实例；它并不修改所调用的实例。如果你想要改变原来的集合，使用transform方法。
+注意：和大多数集合方法一样，`map `返回新的集合实例；它并不修改所调用的实例。如果你想要改变原来的集合，使用`transform`方法。
 ## merge()
-merge 方法合并给定数组到集合。该数组中的任何字符串键匹配集合中的字符串键的将会重写集合中的值：
+`merge` 方法合并给定数组到集合。该数组中的任何字符串键匹配集合中的字符串键的将会重写集合中的值：
 
 ```
 $collection = collect(['product_id' => 1, 'name' => 'Desk']);
@@ -437,7 +437,7 @@ $merged->all();
 ```
 
 ## pluck()
-pluck 方法为给定键获取所有集合值：
+`pluck` 方法为给定键获取所有集合值：
 
 ```
 $collection = collect([
@@ -460,7 +460,7 @@ $plucked->all();
 ```
 
 ## pop()
-pop 方法移除并返回集合中最后面的数据项：
+`pop` 方法移除并返回集合中最后面的数据项：
 
 ```
 $collection = collect([1, 2, 3, 4, 5]);

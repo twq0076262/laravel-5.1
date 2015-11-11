@@ -6,7 +6,7 @@
 ## 2、基本使用
 
 ### 2.1 转化模型为数组
-要转化模型及其加载的关联关系为数组，可以使用 toArray 方法。这个方法是递归的，所以所有属性及其关联对象属性（包括关联的关联）都会被转化为数组：
+要转化模型及其加载的关联关系为数组，可以使用 `toArray` 方法。这个方法是递归的，所以所有属性及其关联对象属性（包括关联的关联）都会被转化为数组：
 
 ```
 $user = App\User::with('roles')->first();
@@ -21,14 +21,14 @@ return $users->toArray();
 ```
 
 ### 2.2 转化模型为 JSON
-要转化模型为 JSON，可以使用 toJson 方法，和 toArray 一样，toJson 方法也是递归的，所有属性及其关联属性都会被转化为 JSON：
+要转化模型为 JSON，可以使用 `toJson` 方法，和 `toArray` 一样，`toJson` 方法也是递归的，所有属性及其关联属性都会被转化为 JSON：
 
 ```
 $user = App\User::find(1);
 return $user->toJson();
 ```
 
-你还可以转化模型或集合为字符串，这将会自动调用 toJson 方法：
+你还可以转化模型或集合为字符串，这将会自动调用 `toJson` 方法：
 
 ```
 $user = App\User::find(1);
@@ -64,7 +64,7 @@ class User extends Model{
 ```
 
 注意：如果要隐藏关联关系，使用关联关系的方法名，而不是动态属性名。
-此外，可以使用 visible 属性定义属性显示的白名单：
+此外，可以使用 `visible` 属性定义属性显示的白名单：
 
 ```
 <?php
@@ -106,7 +106,7 @@ class User extends Model{
 }
 ```
 
-定义好访问器后，添加字段名到模型的 appends 属性：
+定义好访问器后，添加字段名到模型的 `appends` 属性：
 
 ```
 <?php
@@ -125,4 +125,4 @@ class User extends Model{
 }
 ```
 
-字段被添加到 appends 列表之后，将会被包含到模型数组和 JSON 表单中，appends 数组中的字段还会遵循模型中的 visible 和 hidden 设置配置。
+字段被添加到 `appends` 列表之后，将会被包含到模型数组和 JSON 表单中，`appends` 数组中的字段还会遵循模型中的` visible` 和 `hidden` 设置配置。

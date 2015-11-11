@@ -28,7 +28,7 @@ Laravel 源码通过 Github 进行管理，每一个 Laravel 项目都有其对�
 
 重要的新特性总是要被提交到 master 分支，包括下个发行版本。
 
-如果你不确定是重要特性还是次要特性，请在 #laravel-dev IRC 频道问一下 Taylor Otwell
+如果你不确定是重要特性还是次要特性，请在 `#laravel-dev` IRC 频道问一下 Taylor Otwell
 
 ## 安全漏洞
 如果你在 Laravel 中发现安全漏洞，请发送邮件到 taylor@laravel.com，所有的安全漏洞将会被及时解决。
